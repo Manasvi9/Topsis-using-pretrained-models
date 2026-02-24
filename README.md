@@ -1,69 +1,105 @@
-# Topsis-using-pretrained-models
-# Text Generation Model Selection using TOPSIS
+# Assignment: Selection of Best Pre-trained Model using TOPSIS
 
-## Overview
-This project applies the **TOPSIS (Technique for Order Preference by Similarity to Ideal Solution)** method to select the best pre-trained Hugging Face model for text generation.
+## Step 1: Selection of Task
 
-Instead of choosing a model based on a single metric, multiple quality and efficiency criteria are evaluated and ranked using a mathematical decision-making approach.
+Task Selected: **Text Generation**
 
----
+Since the roll number ends with 6, the assigned task category is Text Generation.
 
-## Models Evaluated
-- facebook/bart-base  
-- gpt2  
-- google/flan-t5-small  
-
-All models were loaded using the Hugging Face `transformers` library.
+The objective is to identify the best pre-trained Hugging Face model using a multi-criteria decision-making approach (TOPSIS).
 
 ---
 
-## Dataset
-- Dataset: CNN/DailyMail  
-- Subset used: `test[:20]`  
-- Sampling was applied to reduce computational cost while maintaining evaluation validity.
+## Step 2: Installation and Exploration
+
+The following libraries were used in Google Colab:
+
+- transformers
+- datasets
+- evaluate
+- torch
+- numpy
+- pandas
+- matplotlib
+
+Pre-trained models were loaded using the Hugging Face `transformers` library.
+
+Models evaluated:
+
+1. facebook/bart-base  
+2. gpt2  
+3. google/flan-t5-small  
+
+Dataset used:
+- CNN/DailyMail (subset: test[:20])
+- Sampling was applied to reduce computational cost.
 
 ---
 
-## Evaluation Criteria
+## Step 3: Identification of Evaluation Criteria
 
-| Criterion        | Type      |
-|------------------|----------|
-| BLEU Score       | Benefit ↑ |
-| ROUGE-L          | Benefit ↑ |
-| Perplexity       | Cost ↓    |
-| Inference Time   | Cost ↓    |
-| Model Size       | Cost ↓    |
+The following evaluation criteria were selected:
 
----
+| Criterion | Type |
+|------------|------|
+| BLEU Score | Benefit ↑ |
+| ROUGE-L | Benefit ↑ |
+| Perplexity | Cost ↓ |
+| Inference Time | Cost ↓ |
+| Model Size | Cost ↓ |
 
-## Weights Used
+Benefit criteria are maximized.  
+Cost criteria are minimized.
+
+Weights assigned to criteria:
 
 ```python
 weights = [0.25, 0.25, 0.20, 0.15, 0.15]
 ```
 
-Higher priority was given to generation quality while still considering efficiency.
+---
+
+## Step 4: Model Evaluation
+
+For each pre-trained model:
+
+1. Generate output for dataset samples.
+2. Compute:
+   - BLEU score
+   - ROUGE-L score
+   - Perplexity
+   - Average inference time
+   - Model size (number of parameters)
+
+These values were stored in a decision matrix.
 
 ---
 
-## Methodology
+## Step 5: Application of TOPSIS
 
-1. Load pre-trained models from Hugging Face.
-2. Generate outputs for sampled dataset.
-3. Compute BLEU, ROUGE-L, Perplexity, Inference Time, and Model Size.
-4. Construct decision matrix.
-5. Apply TOPSIS:
-   - Normalize matrix  
-   - Apply weights  
-   - Identify ideal best & worst  
-   - Compute separation distances  
-   - Calculate relative closeness score  
+TOPSIS was implemented manually using the following steps:
 
-The model with the highest TOPSIS score is ranked first.
+1. Normalize the decision matrix.
+2. Multiply normalized values by assigned weights.
+3. Determine ideal best and ideal worst solutions:
+   - Maximum values for benefit criteria
+   - Minimum values for cost criteria
+4. Compute separation distance from ideal best and worst.
+5. Calculate relative closeness score:
+
+Cᵢ = S⁻ / (S⁺ + S⁻)
+
+Where:
+- S⁺ = distance from ideal best
+- S⁻ = distance from ideal worst
+
+Models were ranked based on highest closeness score.
 
 ---
 
-## Results
+## Step 6: Model Comparison and Best Model Selection
+
+The final TOPSIS ranking was:
 
 | Model | TOPSIS Score | Rank |
 |--------|--------------|------|
@@ -71,12 +107,10 @@ The model with the highest TOPSIS score is ranked first.
 | gpt2 | 0.604 | 2 |
 | google/flan-t5-small | 0.569 | 3 |
 
-**Selected Best Model:** facebook/bart-base
+Best Model Selected: **facebook/bart-base**
 
 ---
 
+## Conclusion
 
----
-
-## 🏁 Conclusion
-Using a multi-criteria decision-making approach, TOPSIS enabled objective comparison of multiple Hugging Face text generation models. Based on combined quality and efficiency metrics, **facebook/bart-base** was selected as the best model for the given task.
+Using a structured multi-criteria decision-making approach, multiple Hugging Face pre-trained text generation models were objectively compared. Based on evaluation metrics and TOPSIS ranking, facebook/bart-base achieved the highest overall performance and was selected as the best model for the task.
